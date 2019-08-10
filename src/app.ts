@@ -1,14 +1,17 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import Controller from './app/interface/controller';
 import { PORT, MONGO_USER, MONGO_PASSWORD, MONGO_PATH } from './utils/config';
 
 class App {
   public app: express.Application;
 
-  constructor() {
+  constructor(controllers: Controller[]) {
     this.app = express();
 
     this.connectToTheDatabase();
+    this.initializeMiddlewares();
+    this.initializeControllers(controllers);
   }
 
   public listen() {
@@ -27,6 +30,16 @@ class App {
     } catch (err) {
       console.error(err.message);
     }
+  }
+
+  private initializeControllers(controllers: Controller[]) {
+    controllers.forEach(controller => {
+      this.app.use('/api/', controller.router);
+    });
+  }
+
+  private initializeMiddlewares() {
+    this.app.use(express.json());
   }
 }
 

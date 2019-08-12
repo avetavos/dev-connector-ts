@@ -9,7 +9,7 @@ import postValidator from '../middlewares/validations/Post';
 import commentValidator from '../middlewares/validations/Comment';
 
 class PostController implements Controller {
-  public path = '/post';
+  public path = '/posts';
   public router = Router();
   private user = userModel;
   private post = postModel;
@@ -19,7 +19,7 @@ class PostController implements Controller {
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPost);
     this.router.get(`${this.path}/:id`, this.getPost);
-    this.router.delete(this.path, authMiddleware, this.deletePost);
+    this.router.delete(`${this.path}/:id`, authMiddleware, this.deletePost);
     this.router.post(`${this.path}/like/:id`, authMiddleware, this.likePost);
     this.router.put(`${this.path}/unlike/:id`, authMiddleware, this.unlikePost);
     this.router.post(
@@ -106,8 +106,9 @@ class PostController implements Controller {
     try {
       const post = await this.post.findById(req.params.id);
       if (
-        post.likes.filter(like => like.user.toString() === req.user.toString())
-          .length > 0
+        post.likes.filter(
+          (like: any) => like.user.toString() === req.user.toString()
+        ).length > 0
       ) {
         return res.status(400).json({ msg: 'Post already liked' });
       }
@@ -124,7 +125,7 @@ class PostController implements Controller {
     try {
       const post = await this.post.findById(req.params.id);
       const removeIndex = post.likes
-        .map(like => like.user.toString())
+        .map((like: any) => like.user.toString())
         .indexOf(req.params.id);
       post.likes.splice(removeIndex, 1);
       await post.save();

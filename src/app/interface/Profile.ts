@@ -1,13 +1,13 @@
 interface Profile {
-  _id?: string;
+  _id: string;
   user: string;
-  company?: string;
-  website?: string;
-  location?: string;
+  company: string;
+  website: string;
+  location: string;
   status: string;
   skills: string[];
-  bio?: string;
-  github?: string;
+  bio: string;
+  github: string;
   experience?: Experience[];
   education?: Education[];
 }

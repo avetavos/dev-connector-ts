@@ -12,6 +12,8 @@
     "max-line-length": {
       "options": [100]
     },
+    "object-shorthand-properties-first": false,
+    "no-unused-expression": false,
     "prefer-template": false,
     "interface-name": [true, "never-prefix"],
     "import-name": false,

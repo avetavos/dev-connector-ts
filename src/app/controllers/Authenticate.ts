@@ -1,15 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
+import RequestWithUser from '../interface/RequestWithUser';
 import jwt from 'jsonwebtoken';
 import gravatar from 'gravatar';
 import bcrypt from 'bcryptjs';
 import userModel from '../models/User';
-import Controller from '../interface/controller';
-import registerValidator from '../middlewares/validations/register';
-import loginValidator from '../middlewares/validations/login';
-import RequestWithUser from '../interface/requestWithUser';
-import authMiddleware from '../middlewares/authentication/auth';
-import { JWT_SECRET } from '../../utils/config';
+import Controller from '../interface/Controller';
+import registerValidator from '../middlewares/validations/Register';
+import loginValidator from '../middlewares/validations/Login';
+import authMiddleware from '../middlewares/authentication';
 
 class AuthenticateController implements Controller {
   public path = '/auth';
@@ -92,10 +91,15 @@ class AuthenticateController implements Controller {
       const payload = {
         user: user.id
       };
-      jwt.sign(payload, `${JWT_SECRET}`, { expiresIn: '3h' }, (err, token) => {
-        if (err) throw err;
-        return res.status(200).json({ token });
-      });
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: '3h' },
+        (err, token) => {
+          if (err) throw err;
+          return res.status(200).json({ token });
+        }
+      );
     } catch (err) {
       console.error(err.message);
       return res.status(500).json({ errors: [{ msg: 'Server error' }] });

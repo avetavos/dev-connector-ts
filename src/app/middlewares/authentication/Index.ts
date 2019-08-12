@@ -1,7 +1,6 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import RequestWithUser from '../../interface/requestWithUser';
-import { JWT_SECRET } from '../../../utils/config';
+import RequestWithUser from '../../interface/RequestWithUser';
 
 async function authMiddleware(
   req: RequestWithUser,
@@ -15,7 +14,7 @@ async function authMiddleware(
       .json({ errors: [{ msg: 'No token, Authorization denied' }] });
   }
   try {
-    const decoded: any = await jwt.verify(token, `${JWT_SECRET}`);
+    const decoded: any = await jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
     next();
   } catch (err) {

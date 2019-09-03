@@ -26,7 +26,7 @@ class App {
     try {
       const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
       await mongoose.connect(
-        `mongodb://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`,
+        `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`,
         { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }
       );
       console.log(`MongoDB is connected`);

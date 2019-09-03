@@ -18,7 +18,6 @@ class PostController implements Controller {
     this.router.post(this.path, authMiddleware, postValidator, this.createPost);
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPost);
-    this.router.get(`${this.path}/:id`, this.getPost);
     this.router.delete(`${this.path}/:id`, authMiddleware, this.deletePost);
     this.router.post(`${this.path}/like/:id`, authMiddleware, this.likePost);
     this.router.put(`${this.path}/unlike/:id`, authMiddleware, this.unlikePost);

@@ -1,54 +1,64 @@
-import express from 'express';
+import dotenv from 'dotenv';
+import express, { Application } from 'express';
 import mongoose from 'mongoose';
 import compression from 'compression';
 import morgan from 'morgan';
 import cors from 'cors';
 import Controller from './app/interface/Controller';
 
-class App {
-  public app: express.Application;
+import AuthenticateController from './app/controllers/Authenticate';
+import ProfileController from './app/controllers/Profile';
+import PostController from './app/controllers/Post';
 
-  constructor(controllers: Controller[]) {
-    this.app = express();
+dotenv.config();
 
-    this.connectToTheDatabase();
-    this.initializeMiddlewares();
-    this.initializeControllers(controllers);
-  }
+const app: Application = express();
+const controllers: Controller[] = [
+  new AuthenticateController(),
+  new ProfileController(),
+  new PostController()
+];
 
-  public listen() {
-    this.app.listen(process.env.PORT, () => {
-      console.log(`App listening on the port ${process.env.PORT}`);
-    });
-  }
-
-  private async connectToTheDatabase() {
-    try {
-      const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
-      await mongoose.connect(
-        `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`,
-        { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }
-      );
-      console.log(`MongoDB is connected`);
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
-
-  private initializeControllers(controllers: Controller[]) {
-    controllers.forEach(controller => {
-      this.app.use('/api/', controller.router);
-    });
-  }
-
-  private initializeMiddlewares() {
-    this.app.use(express.json());
-    this.app.use(compression());
-    this.app.use(cors());
-    if (process.env.NODE_ENV === 'development') {
-      this.app.use(morgan('dev'));
-    }
-  }
+app.use(express.json());
+app.use(compression());
+app.use(cors());
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
 }
 
-export default App;
+try {
+  const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
+  mongoose
+    .connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false
+    })
+    .then(() => {
+      console.log(`MongoDB is connected`);
+    });
+} catch (err) {
+  console.error(err.message);
+}
+
+controllers.forEach(controller => {
+  app.use('/api/', controller.router);
+});
+
+app.get('/', (req: express.Request, res: express.Response) => {
+  res.status(200).send({
+    message: 'OK'
+  });
+});
+
+app.post('/', (req: express.Request, res: express.Response) => {
+  res.status(200).send({
+    message: 'OK with POST'
+  });
+});
+
+app.listen(process.env.PORT, () => {
+  console.log(`App listening on the port ${process.env.PORT}`);
+});
+
+export default app;

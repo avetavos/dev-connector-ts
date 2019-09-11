@@ -61,8 +61,8 @@ class AuthenticateController implements Controller {
       });
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
-      user.save();
-      return res.status(200).json(user);
+      await user.save();
+      return res.status(200).json({ msg: 'register successes' });
     } catch (err) {
       console.error(err.message);
       return res.status(500).json({ errors: [{ msg: 'Server error' }] });

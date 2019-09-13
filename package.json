@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/Server.js",
-    "dev": "nodemon ./src/Server.ts",
+    "start": "node ./dist/App.js",
+    "dev": "nodemon ./src/App.ts",
     "build": "tsc -p ."
   },
   "author": "Phongraphi Ruamtham",

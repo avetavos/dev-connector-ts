@@ -4,7 +4,7 @@ import Profile from '../interface/Profile';
 const profileSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'users'
+    ref: 'user'
   },
   company: {
     type: String

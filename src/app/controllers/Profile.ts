@@ -125,7 +125,7 @@ class ProfileController implements Controller {
     try {
       const profiles = await this.profile
         .find()
-        .populate('users', ['name', 'avatar']);
+        .populate('user', ['name', 'avatar']);
       return res.json(profiles);
     } catch (err) {
       console.error(err.message);
@@ -137,7 +137,7 @@ class ProfileController implements Controller {
     try {
       const profile = await this.profile
         .findOne({ user: req.params.user_id })
-        .populate('users', ['name', 'avatar']);
+        .populate('user', ['name', 'avatar']);
       if (!profile) {
         return res
           .status(400)

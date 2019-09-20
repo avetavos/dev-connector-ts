@@ -6,6 +6,7 @@ import authMiddleware from '../middlewares/authentication';
 import Controller from '../interface/Controller';
 import profileModel from '../models/Profile';
 import userModel from '../models/User';
+import postModel from '../models/Post';
 import profileValidator from '../middlewares/validations/Profile';
 import experienceValidator from '../middlewares/validations/Experience';
 import educationValidator from '../middlewares/validations/Education';
@@ -15,6 +16,7 @@ class ProfileController implements Controller {
   public router = Router();
   private user = userModel;
   private profile = profileModel;
+  private post = postModel;
 
   constructor() {
     this.router.get(`${this.path}/me`, authMiddleware, this.myProfile);
@@ -151,6 +153,7 @@ class ProfileController implements Controller {
   private deleteProfile = async (req: RequestWithUser, res: Response) => {
     try {
       await this.profile.findOneAndRemove({ user: req.user });
+      await this.post.findOneAndRemove({ user: req.user });
       await this.user.findByIdAndDelete(req.user);
       return res.json({ msg: 'User deleted' });
     } catch (err) {
@@ -253,11 +256,7 @@ class ProfileController implements Controller {
     try {
       axios
         .get(
-          `https://api.github.com/users/${
-            req.params.username
-          }/repos?per_page=5&sort=created:asc&client_id=${
-            process.env.GITHUB_CLIENT_ID
-          }&client_secret=${process.env.GITHUB_SECRET}`
+          `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_SECRET}`
         )
         .then(result => {
           res.json(result.data);

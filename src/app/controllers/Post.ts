@@ -19,7 +19,7 @@ class PostController implements Controller {
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPost);
     this.router.delete(`${this.path}/:id`, authMiddleware, this.deletePost);
-    this.router.post(`${this.path}/like/:id`, authMiddleware, this.likePost);
+    this.router.put(`${this.path}/like/:id`, authMiddleware, this.likePost);
     this.router.put(`${this.path}/unlike/:id`, authMiddleware, this.unlikePost);
     this.router.post(
       `${this.path}/comment/:id`,
@@ -115,7 +115,7 @@ class PostController implements Controller {
       await post.save();
       return res.send(post.likes);
     } catch (err) {
-      console.error(err.message);
+      console.log(err.message);
       return res.status(500).send('Server error');
     }
   };

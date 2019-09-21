@@ -6,17 +6,17 @@ import morgan from 'morgan';
 import cors from 'cors';
 import Controller from './app/interface/Controller';
 
-import AuthenticateController from './app/controllers/Authenticate';
-import ProfileController from './app/controllers/Profile';
-import PostController from './app/controllers/Post';
+import Authenticate from './app/controllers/Authenticate';
+import Profile from './app/controllers/Profile';
+import Post from './app/controllers/Post';
 
 dotenv.config();
 
 const app: Application = express();
 const controllers: Controller[] = [
-  new AuthenticateController(),
-  new ProfileController(),
-  new PostController()
+  new Authenticate(),
+  new Profile(),
+  new Post()
 ];
 
 app.use(express.json());
@@ -41,11 +41,11 @@ try {
   console.error(err.message);
 }
 
-controllers.forEach(controller => {
+controllers.forEach((controller: Controller) => {
   app.use('/api/', controller.router);
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, (): void => {
   console.log(`App listening on the port ${process.env.PORT}`);
 });
 

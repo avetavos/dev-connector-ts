@@ -12,11 +12,20 @@
     "max-line-length": {
       "options": [100]
     },
+    "variable-name": {
+      "options": ["ban-keywords"]
+    },
     "object-shorthand-properties-first": false,
     "no-unused-expression": false,
     "prefer-template": false,
     "interface-name": [true, "never-prefix"],
-    "import-name": false,
+    "import-name": [
+      true,
+      {
+        "react": "React",
+        "react-dom": "ReactDOM"
+      }
+    ],
     "no-console": false,
     "object-literal-sort-keys": false,
     "ordered-imports": [

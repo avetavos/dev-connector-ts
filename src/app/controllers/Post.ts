@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import RequestWithUser from '../interface/RequestWithUser';
+import RequestWithUser from '../interfaces/RequestWithUser';
 import userModel from '../models/User';
 import postModel from '../models/Post';
-import Controller from '../interface/Controller';
-import authMiddleware from '../middlewares/authentication';
+import Controller from '../interfaces/Controller';
+import authentication from '../middlewares/authentication';
 import postValidator from '../middlewares/validations/Post';
 import commentValidator from '../middlewares/validations/Comment';
 
@@ -15,21 +15,21 @@ class PostController implements Controller {
   private post = postModel;
 
   constructor() {
-    this.router.post(this.path, authMiddleware, postValidator, this.createPost);
+    this.router.post(this.path, authentication, postValidator, this.createPost);
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPost);
-    this.router.delete(`${this.path}/:id`, authMiddleware, this.deletePost);
-    this.router.put(`${this.path}/like/:id`, authMiddleware, this.likePost);
-    this.router.put(`${this.path}/unlike/:id`, authMiddleware, this.unlikePost);
+    this.router.delete(`${this.path}/:id`, authentication, this.deletePost);
+    this.router.put(`${this.path}/like/:id`, authentication, this.likePost);
+    this.router.put(`${this.path}/unlike/:id`, authentication, this.unlikePost);
     this.router.post(
       `${this.path}/comment/:id`,
-      authMiddleware,
+      authentication,
       commentValidator,
       this.commentPost
     );
     this.router.delete(
       `${this.path}/comment/:id/:comment_id`,
-      authMiddleware,
+      authentication,
       this.removeComment
     );
   }

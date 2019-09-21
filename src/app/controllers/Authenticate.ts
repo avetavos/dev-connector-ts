@@ -5,10 +5,10 @@ import jwt from 'jsonwebtoken';
 import gravatar from 'gravatar';
 import bcrypt from 'bcryptjs';
 import userModel from '../models/User';
-import Controller from '../interface/Controller';
+import Controller from '../interfaces/Controller';
 import registerValidator from '../middlewares/validations/Register';
 import loginValidator from '../middlewares/validations/Login';
-import authMiddleware from '../middlewares/authentication';
+import authentication from '../middlewares/authentication';
 
 class AuthenticateController implements Controller {
   public path = '/auth';
@@ -20,7 +20,7 @@ class AuthenticateController implements Controller {
   }
 
   private initializeRoutes() {
-    this.router.get(this.path, authMiddleware, this.currentUser);
+    this.router.get(this.path, authentication, this.currentUser);
     this.router.post(`${this.path}/register`, registerValidator, this.register);
     this.router.post(`${this.path}/login`, loginValidator, this.login);
   }

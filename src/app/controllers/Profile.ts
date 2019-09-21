@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
-import RequestWithUser from '../interface/RequestWithUser';
+import RequestWithUser from '../interfaces/RequestWithUser';
 import { validationResult } from 'express-validator';
 import axios from 'axios';
-import authMiddleware from '../middlewares/authentication';
-import Controller from '../interface/Controller';
+import authentication from '../middlewares/authentication';
+import Controller from '../interfaces/Controller';
 import profileModel from '../models/Profile';
 import userModel from '../models/User';
 import postModel from '../models/Post';
@@ -19,36 +19,36 @@ class ProfileController implements Controller {
   private post = postModel;
 
   constructor() {
-    this.router.get(`${this.path}/me`, authMiddleware, this.myProfile);
+    this.router.get(`${this.path}/me`, authentication, this.myProfile);
     this.router.post(
       this.path,
-      authMiddleware,
+      authentication,
       profileValidator,
       this.createAndUpdate
     );
     this.router.get(this.path, this.getAllProfiles);
     this.router.get(`${this.path}/user/:user_id`, this.getProfile);
-    this.router.delete(this.path, authMiddleware, this.deleteProfile);
+    this.router.delete(this.path, authentication, this.deleteProfile);
     this.router.put(
       `${this.path}/experience`,
-      authMiddleware,
+      authentication,
       experienceValidator,
       this.addExperience
     );
     this.router.delete(
       `${this.path}/experience/:exp_id`,
-      authMiddleware,
+      authentication,
       this.removeExperience
     );
     this.router.put(
       `${this.path}/education`,
-      authMiddleware,
+      authentication,
       educationValidator,
       this.addEducation
     );
     this.router.delete(
       `${this.path}/education/:edu_id`,
-      authMiddleware,
+      authentication,
       this.removeEducation
     );
     this.router.get(`${this.path}/github/:username`, this.github);

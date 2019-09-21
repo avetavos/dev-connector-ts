@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import RequestWithUser from '../../interface/RequestWithUser';
+import RequestWithUser from '../../interfaces/RequestWithUser';
 
 async function authMiddleware(
   req: RequestWithUser,

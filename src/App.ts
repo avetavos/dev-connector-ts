@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import compression from 'compression';
 import morgan from 'morgan';
 import cors from 'cors';
-import Controller from './app/interface/Controller';
+import Controller from './app/interfaces/Controller';
 
 import Authenticate from './app/controllers/Authenticate';
 import Profile from './app/controllers/Profile';
